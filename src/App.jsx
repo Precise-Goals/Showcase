@@ -5,9 +5,9 @@ import {
   Routes,
   Route,
   Navigate,
-  useLocation,
 } from "react-router-dom";
 import "./styles/global.css";
+import "./App.css"
 import { AuthProvider, useAuth } from "./contexts/AuthContext.jsx";
 
 // Pages
@@ -19,27 +19,12 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/SignUp";
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
-import Df from "./components/Df.jsx"; // new footer for Assista
+import Layout from "./components/Layout.jsx";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
   const { currentUser } = useAuth();
   return currentUser ? children : <Navigate to="/login" />;
-};
-
-// Wrapper for showing different footers
-const Layout = ({ children }) => {
-  const location = useLocation();
-
-  return (
-    <>
-      <Navbar />
-      {children}
-      {location.pathname === "/assista" ? <Df /> : <Footer />}
-    </>
-  );
 };
 
 function App() {
@@ -61,6 +46,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Dyann />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
                 </PrivateRoute>
               }
             />

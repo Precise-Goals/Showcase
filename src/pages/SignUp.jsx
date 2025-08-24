@@ -12,11 +12,12 @@ const Signup = () => {
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState("");
+  const [showAvatars, setShowAvatars] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const avatars = [1, 2, 3, 4, 5, 6]; // available avatars
+  const avatars = ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,17 +32,16 @@ const Signup = () => {
       const userCredential = await signup(email, password);
       const user = userCredential.user;
 
-      // Save extra details in Firestore
       await setDoc(doc(db, "users", user.uid), {
         name,
         organization,
         contact,
         email,
-        avatar: `/avatars/${avatar}.png`,
+        avatar, // "1.png", "2.png" etc.
         createdAt: new Date(),
       });
 
-      navigate("/dashboard"); // redirect after signup
+      navigate("/dashboard");
     } catch (err) {
       setError("Failed to create account. " + err.message);
     }
@@ -49,66 +49,91 @@ const Signup = () => {
 
   return (
     <div className="auth-container">
-      <h2>Create your Dyann Account</h2>
+      <h2>SIGN UP</h2>
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Organization Name"
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-          required
-        />
-        <input
-          type="tel"
-          placeholder="Contact Number"
-          value={contact}
-          onChange={(e) => setContact(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password (min 6 chars)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className="fors">
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Organization Name"
+            value={organization}
+            onChange={(e) => setOrganization(e.target.value)}
+            required
+          />
+          <input
+            type="tel"
+            placeholder="Contact Number"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password (min 6 chars)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
         {/* Avatar Selection */}
         <div className="avatar-picker">
-          <p>Select an Avatar:</p>
-          <div className="avatar-grid">
-            {avatars.map((num) => (
-              <img
-                key={num}
-                src={`/avatars/${num}.png`}
-                alt={`avatar-${num}`}
-                className={`avatar-option ${avatar === num ? "selected" : ""}`}
-                onClick={() => setAvatar(num)}
-              />
-            ))}
-          </div>
+          <p>{!avatar ? "Choose an Avatar" : ""}</p>
+
+          {/* Show preview if selected */}
+          {avatar && (
+            <div className="avatar-preview">
+              <img src={`/avatars/${avatar}`} alt="selected avatar" />
+            </div>
+          )}
+
+          <button
+            type="button"
+            className="choose-avatar-btn"
+            onClick={() => setShowAvatars(!showAvatars)}
+          >
+            {showAvatars ? "Close Avatar Picker" : "Choose Avatar"}
+          </button>
+
+          {showAvatars && (
+            <div className="avatar-grid">
+              {avatars.map((file) => (
+                <img
+                  key={file}
+                  src={`/avatars/${file}`}
+                  alt={`avatar-${file}`}
+                  className={`avatar-option ${
+                    avatar === file ? "selected" : ""
+                  }`}
+                  onClick={() => {
+                    setAvatar(file);
+                    setShowAvatars(false); // close picker after choosing
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="btn">Sign Up</button>
       </form>
 
-      <p>
+      <p className="tog">
         Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
