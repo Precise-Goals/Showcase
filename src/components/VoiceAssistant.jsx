@@ -1,7 +1,11 @@
 import React from 'react'
 
-export const VoiceAssistant = () => {
+const VoiceAssistant = () => {
   return (
-    <div>VoiceAssistant</div>
+    <div>
+      
+    </div>
   )
 }
+
+export default VoiceAssistant
