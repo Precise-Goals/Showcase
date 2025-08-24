@@ -18,7 +18,7 @@ import Reviews from "./pages/Reviews";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login.jsx";
-import Signup from "./pages/Signup";
+import Signup from "./pages/SignUp";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Df from "./components/Df.jsx"; // new footer for Assista
