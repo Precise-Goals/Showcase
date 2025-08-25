@@ -280,6 +280,7 @@ const CSVChatInterface = ({ csvData, onAnalysisComplete }) => {
 
         setMessages((prev) => [...prev, botMessage]);
       } catch (error) {
+        console.log("Error processing message:", error);
         const errorMessage = {
           id: Date.now() + 1,
           type: "bot",

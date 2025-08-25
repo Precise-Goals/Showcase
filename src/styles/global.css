@@ -708,3 +708,94 @@ input[type="text"] {
   border-radius: 5rem;
   border: 1px solid;
 }
+.inpsa div {
+  padding: 1% 25%;
+  font-size: 21px;
+  font-weight: 300;
+  font-style: italic;
+  gap: 0.75em;
+  display: flex;
+  flex-direction: column;
+}
+
+.inpsa pre {
+  background: black;
+  padding: 2% 5%;
+  color: white;
+  font-style: normal;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 3% 0px 1% 0;
+}
+
+.inpsa table {
+  padding: 2% 2%;
+  border-radius: 3rem;
+}
+
+th,
+td {
+  border-radius: 10px;
+  padding: 2% 7%;
+  width: 25rem;
+}
+.inpsa div {
+  padding: 1% 25%;
+  font-size: 21px;
+  font-weight: 300;
+  font-style: italic;
+  gap: 0.75em;
+  display: flex;
+  flex-direction: column;
+}
+
+.inpsa pre {
+  background: black;
+  padding: 2% 5%;
+  color: white;
+  font-style: normal;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 3% 0px 1% 0;
+}
+
+.inpsa table {
+  padding: 2% 2%;
+  border-radius: 3rem;
+}
+
+th,
+td {
+  border-radius: 10px;
+  padding: 2% 7%;
+  width: 25rem;
+}
+
+.inpsa thead tr th {
+  background: black;
+  color: white;
+}
+.lokas {
+  display: flex;
+  flex-direction: row;
+}
+
+.lokas button {
+  width: 5rem;
+  text-align: center;
+  padding: 1% 4%;
+}
+
+.lokas {
+  align-items: stretch;
+  gap: 0px;
+  justify-content: center;
+}
+input[type="file"]::file-selector-button {
+  padding: 3% 8%;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}

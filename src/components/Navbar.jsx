@@ -1,5 +1,6 @@
 import React from "react";
 import { GiRamProfile } from "react-icons/gi";
+import { RiLinkUnlink } from "react-icons/ri";
 
 import { Link } from "react-router-dom";
 
@@ -26,6 +27,11 @@ const Navbar = () => {
         <li className="item">
           <Link to="/profile">
             <GiRamProfile />
+          </Link>
+        </li>
+        <li className="item">
+          <Link to="https://dyann-ai-assistant.onrender.com/" className="item">
+            <RiLinkUnlink />
           </Link>
         </li>
       </ul>
