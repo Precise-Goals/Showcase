@@ -1,167 +1,140 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./reviews.css";
+import { datab } from "../firebase/config"; // adjust path
+import { ref, get, push, set } from "firebase/database";
 
-const dummyReviews = [
-  {
-    id: 1,
-    username: "Rajesh Sharma",
-    description:
-      "As a Senior Data Scientist, I found the platform extremely useful in streamlining workflows and improving model deployment efficiency.",
-    email: "rajesh.sharma@datainsights.in",
-    rating: 5,
-    avatar: "/1.png", // male
-  },
-  {
-    id: 2,
-    username: "Priya Nair",
-    description:
-      "The analytics dashboard provided valuable insights. As a Data Analyst, I could derive patterns quickly and present them to stakeholders effectively.",
-    email: "priya.nair@analyticspro.in",
-    rating: 4,
-    avatar: "/2.png", // female
-  },
-  {
-    id: 3,
-    username: "Ananya Gupta",
-    description:
-      "User-friendly interface with powerful data visualization features. Perfect for data storytelling and client presentations.",
-    email: "ananya.gupta@datasolutions.in",
-    rating: 5,
-    avatar: "/3.png", // female
-  },
-  {
-    id: 4,
-    username: "Shreya Iyer",
-    description:
-      "Good experience overall. The automation features saved me a lot of manual effort in cleaning and preparing datasets.",
-    email: "shreya.iyer@insightlabs.in",
-    rating: 4,
-    avatar: "/4.png", // female
-  },
-  {
-    id: 5,
-    username: "Amit Verma",
-    description:
-      "Efficient and reliable tool for large-scale data processing. It definitely enhanced the productivity of my data science team.",
-    email: "amit.verma@predictiveai.in",
-    rating: 5,
-    avatar: "/5.png", // male
-  },
-  {
-    id: 6,
-    username: "Karan Malhotra",
-    description:
-      "The integration with machine learning pipelines was seamless. Great platform for experimenting with new models.",
-    email: "karan.malhotra@mlhub.in",
-    rating: 4,
-    avatar: "/6.png", // male
-  },
-  {
-    id: 7,
-    username: "Neha Reddy",
-    description:
-      "Clean UI and smooth navigation. As a data analyst, I could focus more on insights rather than struggling with tools.",
-    email: "neha.reddy@dataworks.in",
-    rating: 5,
-    avatar: "/2.png", // female
-  },
-  
-];
-
-const Reviews = () => {
-  const [reviews, setReviews] = useState(dummyReviews);
+export default function Reviews() {
+  const [reviews, setReviews] = useState([]);
+  const [current, setCurrent] = useState(0);
   const [formData, setFormData] = useState({
-    username: "",
-    description: "",
-    email: "",
-    rating: 0,
-    avatar: "",
+    name: "",
+    text: "",
+    rating: 5,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const randomAvatar =
-      formData.username.toLowerCase().includes("a") ||
-      formData.username.toLowerCase().includes("e")
-        ? `/2.png` // just pick one female avatar for demo
-        : `/1.png`; // pick one male avatar for demo
-
-    const newReview = {
-      id: reviews.length + 1,
-      ...formData,
-      avatar: randomAvatar,
+  // Fetch reviews one-time on mount
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const reviewsRef = ref(datab, "reviews");
+        const snapshot = await get(reviewsRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const reviewsArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setReviews(reviewsArray);
+        } else {
+          setReviews([]);
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
     };
 
-    setReviews([...reviews, newReview]);
-    setFormData({
-      username: "",
-      description: "",
-      email: "",
-      rating: 0,
-      avatar: "",
-    });
+    fetchReviews();
+  }, []);
+
+  const nextReview = () => {
+    if (reviews.length > 0) {
+      setCurrent((prev) => (prev + 1) % reviews.length);
+    }
+  };
+
+  const prevReview = () => {
+    if (reviews.length > 0) {
+      setCurrent((prev) => (prev - 1 + reviews.length) % reviews.length);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const reviewsRef = ref(datab, "reviews");
+      const newReviewRef = push(reviewsRef);
+      await set(newReviewRef, {
+        ...formData,
+        createdAt: Date.now(),
+      });
+
+      // re-fetch reviews after adding
+      const snapshot = await get(reviewsRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const updatedReviews = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setReviews(updatedReviews);
+        setCurrent(updatedReviews.length - 1); // move to newest
+      }
+
+      setFormData({ name: "", text: "", rating: 5 });
+    } catch (error) {
+      console.error("Error adding review:", error);
+    }
+  };
+
+  const renderStars = (count) => {
+    return "★".repeat(count) + "☆".repeat(5 - count);
   };
 
   return (
-    <div className="reviews">
-      <h1>Our Reviews</h1>
-
-      <div className="carousel">
-        {reviews.map((review) => (
-          <div key={review.id} className="review-card">
-            <img
-              src={"avatars/" + review.avatar}
-              alt={review.username}
-              className="avatar"
-            />
-            <h3>{review.username}</h3>
-            <p>{review.description}</p>
-            <p>Email: {review.email}</p>
-            <p>Rating: {"⭐".repeat(review.rating)}</p>
+    <div className="reviews-container">
+      {reviews.length > 0 ? (
+        <div className="review-card">
+          <div className="review-stars">
+            {renderStars(reviews[current].rating)}
           </div>
-        ))}
-      </div>
+          <p className="review-text">"{reviews[current].text}"</p>
+          <h4 className="review-author">- {reviews[current].name}</h4>
+        </div>
+      ) : (
+        <p>No reviews yet. Be the first to add one!</p>
+      )}
 
-      <form onSubmit={handleSubmit} className="review-form">
+      {reviews.length > 1 && (
+        <div className="review-buttons">
+          <button onClick={prevReview}>◀</button>
+          <button onClick={nextReview}>▶</button>
+        </div>
+      )}
+
+      <form className="review-form" onSubmit={handleSubmit}>
+        <h3>Add Your Review</h3>
         <input
           type="text"
-          placeholder="Your Name"
-          value={formData.username}
-          onChange={(e) =>
-            setFormData({ ...formData, username: e.target.value })
-          }
-          required
-        />
-        <input
-          type="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          name="name"
+          placeholder="Your name"
+          value={formData.name}
+          onChange={handleChange}
           required
         />
         <textarea
-          placeholder="Your Review"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          name="text"
+          placeholder="Your review"
+          value={formData.text}
+          onChange={handleChange}
           required
         />
-        <input
-          type="number"
-          placeholder="Rating (1-5)"
-          min="1"
-          max="5"
-          value={formData.rating}
-          onChange={(e) =>
-            setFormData({ ...formData, rating: Number(e.target.value) })
-          }
-          required
-        />
+        <label>
+          Rating:
+          <select name="rating" value={formData.rating} onChange={handleChange}>
+            {[5, 4, 3, 2, 1].map((r) => (
+              <option key={r} value={r}>
+                {r} Stars
+              </option>
+            ))}
+          </select>
+        </label>
         <button type="submit">Submit Review</button>
       </form>
     </div>
   );
-};
-
-export default Reviews;
+}

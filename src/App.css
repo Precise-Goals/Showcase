@@ -48,3 +48,48 @@ button.llsad {
   right: 2%;
   position: absolute;
 }
+.reviews-container {
+  background: black;
+  position: relative;
+  color: white;
+}
+
+.review-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  letter-spacing: 0.2em;
+  font-size: 2rem;
+}
+
+p.review-text {
+  font-size: 20px;
+  color: white;
+  font-weight: 100;
+}
+
+h4.review-author {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.review-buttons {
+  width: 115%;
+  position: absolute;
+  top: 15%;
+  justify-content: space-between;
+  right: -7.5%;
+}
+
+.review-buttons button {
+  background: black;
+  font-size: small;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  border-radius: 4rem;
+  padding: 1% 2%;
+}
