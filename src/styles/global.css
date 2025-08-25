@@ -536,3 +536,11 @@ button.logout-btn:hover {
 .profile-wrapper {
   padding: 3% 10%;
 }
+.auth-container h2 {
+  line-height: 127%;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: row-reverse;
+}

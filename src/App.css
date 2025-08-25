@@ -93,3 +93,11 @@ h4.review-author {
   border-radius: 4rem;
   padding: 1% 2%;
 }
+.auth-container h2 {
+    line-height: 127%;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: row-reverse;
+}
