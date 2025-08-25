@@ -1,0 +1,111 @@
+/* reviews.css */
+
+.reviews {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.reviews h1 {
+  margin-bottom: 1.5rem;
+}
+
+/* Carousel Container */
+.carousel {
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Carousel Cards */
+.review-card {
+  flex: 0 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  scroll-snap-align: center;
+}
+
+.review-card img.avatar {
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Sizes for each card */
+.review-card:nth-child(1),
+.review-card:nth-child(5) {
+  width: 180px; /* small */
+}
+
+.review-card:nth-child(2),
+.review-card:nth-child(4) {
+  width: 240px; /* medium */
+}
+
+.review-card:nth-child(3) {
+  width: 300px; /* large */
+}
+
+/* Carousel scroll container */
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  font-size: 2rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.3s ease;
+}
+
+.carousel-arrow:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.carousel-arrow.left {
+  left: 0.5rem;
+}
+
+.carousel-arrow.right {
+  right: 0.5rem;
+}
+
+/* Optional: responsive */
+@media (max-width: 768px) {
+  .review-card:nth-child(1),
+  .review-card:nth-child(5) {
+    width: 140px;
+  }
+
+  .review-card:nth-child(2),
+  .review-card:nth-child(4) {
+    width: 180px;
+  }
+
+  .review-card:nth-child(3) {
+    width: 220px;
+  }
+}

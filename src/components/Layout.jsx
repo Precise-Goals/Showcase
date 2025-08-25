@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import { FaPlay } from "react-icons/fa";
-import { PiPhonePauseFill } from "react-icons/pi";
 import { FaPause } from "react-icons/fa";
 
 import Footer from "./Footer.jsx";
@@ -38,7 +37,6 @@ const Layout = ({ children }) => {
       <button className="llsad" onClick={handleToggle}>
         {isPlaying ? <FaPause /> : <FaPlay />}
       </button>
-
       <Navbar />
       {children}
       {location.pathname === "/assista" ? <Df /> : <Footer />}
