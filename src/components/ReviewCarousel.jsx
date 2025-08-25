@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import "../pages/reviews.css";
 
-const ReviewCard = ({ review }) => {
-  const renderStars = (rating) =>
+const ReviewCard = ({ review = {} }) => {
+  const renderStars = (rating = 0) =>
     Array.from({ length: 5 }, (_, index) => (
       <Star
         key={index}
@@ -16,24 +16,36 @@ const ReviewCard = ({ review }) => {
     <div className="review-card">
       <div className="review-header">
         <img
-          src={`/avatars/${review.avatar}.png`}
-          alt={review.username}
+          src={`/avatars/${review.avatar || "default"}.png`}
+          alt={review.username || "Anonymous"}
           className="avatar"
+          onError={(e) => {
+            e.target.src = "/avatars/default.png";
+          }}
         />
         <div className="user-info">
-          <h3>{review.username}</h3>
+          <h3>{review.username || "Anonymous"}</h3>
           <div className="rating-date">
             <div className="stars">{renderStars(review.rating)}</div>
-            <span className="date">{review.date}</span>
+            <span className="date">{review.date || "No date"}</span>
           </div>
         </div>
       </div>
-      <p className="review-text">{review.description}</p>
+      <p className="review-text">{review.description || "No review text"}</p>
     </div>
   );
 };
 
-const ReviewCarousel = ({ reviews }) => {
+const ReviewCarousel = ({ reviews = [] }) => {
+  // Handle empty reviews array
+  if (!reviews || reviews.length === 0) {
+    return (
+      <div className="carousel-container">
+        <div className="no-reviews">No reviews available</div>
+      </div>
+    );
+  }
+
   const initialIndex = Math.floor(reviews.length / 2);
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
@@ -66,7 +78,7 @@ const ReviewCarousel = ({ reviews }) => {
     <div className="carousel-container">
       <div className="carousel-wrapper">
         {reviews.map((review, index) => (
-          <div key={review.id} className={getCardClass(index)}>
+          <div key={review.id || index} className={getCardClass(index)}>
             <ReviewCard review={review} />
           </div>
         ))}
@@ -80,7 +92,7 @@ const ReviewCarousel = ({ reviews }) => {
       <div className="dots-container">
         {reviews.map((review, index) => (
           <button
-            key={review.id}
+            key={review.id || index}
             onClick={() => goToSlide(index)}
             className={`dot ${index === currentIndex ? "active" : ""}`}
           />
