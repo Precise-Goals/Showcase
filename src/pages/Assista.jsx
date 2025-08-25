@@ -180,13 +180,12 @@ Voice guidelines for TTS adaptation:
   };
 
   return (
-    <div className="scene">
+    <div className="scenesadsaf">
       {/* Spline 3D Scene */}
       <div style={{ width: "100%", height: "50vh", background: "#f0f0f0" }}>
         <Spline scene="/finvoice.splinecode" />
       </div>
 
-      {/* Voice Control Button */}
       <button className="voice-button" onClick={handleButtonClick}>
         {isSpeaking || isListening ? <ImCross /> : <FaMicrophoneAlt />}
       </button>
